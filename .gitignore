@@ -1,0 +1,5 @@
+/target
+/.env
+/todo_list.db
+/todo_list.db.wal
+/targetiit8Er
