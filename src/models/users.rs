@@ -13,3 +13,10 @@ pub struct ReqAddUser {
 pub struct ResAddUser {
     pub nama_depan: String,
 }
+
+#[derive(Serialize)]
+pub struct GetUser {
+    pub nama_depan: String,
+    pub nama_belakang: String,
+    pub otp: String,
+}

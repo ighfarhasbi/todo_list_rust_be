@@ -4,6 +4,7 @@ mod routes;
 mod database;
 mod helper;
 mod models;
+mod jwt;
 
 pub async fn run() {
     let conn = initialize_db().unwrap();

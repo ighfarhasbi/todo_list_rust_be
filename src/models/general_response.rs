@@ -6,3 +6,9 @@ pub struct ResponseModel<T> {
     pub message: String,
     pub data: Option<T>,
 }
+
+#[derive(Serialize)]
+pub struct GeneralResponse {
+    pub kode: String,
+    pub message: String,
+}
