@@ -4,7 +4,7 @@ use axum::{http::StatusCode, response::{IntoResponse, Response}, Extension, Json
 use duckdb::{params, Connection};
 use serde::Serialize;
 
-use crate::{helper::hash_pass::verify_password, jwt::jwt::{create_access_token, create_refresh_token}, models::{general_response::{GeneralResponse, ResponseModel}, login::{ReqLogin, ResLoginUser}}};
+use crate::{helper::hash_pass::verify_password, jwt::jwt::{create_access_token, create_refresh_token}, models::{general_response::{GeneralResponse, ResponseModel}, login::{ReqLogin, ReqLogout, ResLoginUser}}};
 
 pub async fn login(conn: Extension<Arc<Mutex<Connection>>>, login_user: Json<ReqLogin>) -> Result<Response, (StatusCode, String)> {
     let conn = conn.lock()
@@ -110,4 +110,16 @@ pub async fn login(conn: Extension<Arc<Mutex<Connection>>>, login_user: Json<Req
             Ok((StatusCode::NOT_FOUND, Json(result)).into_response())
         }
     }
+}
+
+pub async fn logout_user(conn: Extension<Arc<Mutex<Connection>>>, logout_user: Json<ReqLogout>) -> Result<Response, (StatusCode, String)> {
+    let conn = conn.lock().map_err(|_| (StatusCode::INTERNAL_SERVER_ERROR, "Failed to lock connection".to_string()))?;
+    let mut stmt = conn.prepare("DELETE FROM token_user WHERE no_hp = ?")
+        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
+    stmt.execute(params![logout_user.no_hp])
+        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
+    Ok((StatusCode::OK, Json(GeneralResponse {
+        kode: StatusCode::OK.to_string(),
+        message: "Berhasil Logout".to_string(),
+    })).into_response())
 }

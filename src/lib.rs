@@ -5,6 +5,7 @@ mod database;
 mod helper;
 mod models;
 mod jwt;
+mod middleware;
 
 pub async fn run() {
     let conn = initialize_db().unwrap();

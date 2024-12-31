@@ -11,3 +11,8 @@ pub struct ResLoginUser {
     pub nama_depan: String,
     pub token: String,
 }
+
+#[derive(Deserialize)]
+pub struct ReqLogout {
+    pub no_hp: String,
+}
